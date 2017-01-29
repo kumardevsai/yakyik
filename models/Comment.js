@@ -11,7 +11,11 @@ var CommentSchema = new mongoose.Schema({
     },
     timestamp: {
         type: Date, 
-        default: Date.now()
+        default: new Date()
+    },
+    zoneID: {
+        type: String,
+        default: ''
     }
 });
 

@@ -4,6 +4,11 @@ import styles from './zone-styles';
 
 const Zones = (props) => {
     
+    let timestamp = props.zonePropsObj.timestamp;
+    if (typeof timestamp == 'string') {
+        timestamp = new Date(timestamp);
+    }
+    
     return(
         <div style={ styles.container }>
             <h2 style={ styles.header }>
@@ -14,8 +19,9 @@ const Zones = (props) => {
                 </a>
                 <br/>
             </h2>
-            <span>{ props.zonePropsObj.zipCodes }</span><br />
-            <span>{ props.zonePropsObj.timestamp }</span>
+            <span>{ props.zonePropsObj.zipCodes }</span>
+            <br />
+            <span>{ timestamp.toDateString() }</span>
         </div>         
     );    
 }

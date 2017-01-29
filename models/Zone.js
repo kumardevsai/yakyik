@@ -6,12 +6,12 @@ var ZoneSchema = new mongoose.Schema({
         default: '' 
     },
     zipCodes: {
-        type:Array,
+        type: Array,
         default:[] 
     },
     timestamp: {
         type: Date, 
-        default: Date.now()
+        default: new Date()
     }
 });
 
