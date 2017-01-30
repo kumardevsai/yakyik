@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Zone from '../presentations/Zone';
 import ZoneAdd from '../presentations/ZoneAdd';
 // helps with loading data from api
-import superagent from 'superagent';
+import { APIManager } from '../../utils';
 
 class Zones extends Component {
     
@@ -21,23 +21,16 @@ class Zones extends Component {
     
     componentDidMount() {
         
-        superagent
-            .get('/api/zone')
-            .query(null)
-            .set('Accept', 'application/json')
-            .end((err, response) => {
-                if (err) {
-                    alert('ERROR: ' + err);
-                    return
-                }
+        APIManager.get('api/zone', null, (err, response) => {
+            if (err) {
+                alert('ERROR ZONE FIND: ' + err.message);
+                return
+            }
                 
-                let results = response.body.results;
-                
-                this.setState({
-                    zoneList: results
-                })
-                
+            this.setState({
+                zoneList: response.results
             });
+        })
     }
     
     // handles updates for both zone.name and zone.zipCodes
@@ -54,24 +47,37 @@ class Zones extends Component {
         event.preventDefault();
         
         let newZone = this.state.zone;
-        newZone.timestamp = new Date();
+        // zips is a string of zip codes
+        let zips = newZone.zipCodes;
+        let zipsArray = zips.split(',');
         
-        this.setState({
-            zoneList: this.state.zoneList.concat(newZone)
+        // trim possible white space around the zip codes
+        let newZips = [];
+        zipsArray.forEach(function(zipCode) {
+            newZips.push(zipCode.trim());
         });
         
-        // save zone to mongo
-        superagent
-            .post('/api/zone')
-            .send(newZone)
-            .set('Accept', 'application/json')
-            .end((err, res) => {
-               if (err) {
-                   alert('ERROR: ZONE POST ' + err);
-                   return
-               } 
-               console.log('SUCCESS: ZONE POST');
+        newZone.zipCodes = newZips;
+        
+        // save comment to mongo
+        APIManager.post('/api/zone', newZone, (err, response) => {
+            if (err) {
+                console.log("ERROR ZONE POST: " + err.message, null);
+                return
+            }
+            
+            const result = response.result;
+            
+            console.log("SUCCESS: ZONE CREATED " +
+                        JSON.stringify(result));
+                        
+            // set the state
+            // result has been processed by the API, so the default
+            // timestamp has been added to the object
+            this.setState({
+                zoneList: this.state.zoneList.concat(result)
             });
+        });
     }
     
     render() {

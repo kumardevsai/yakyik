@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Comment from '../presentations/Comment';
 import CommentHeader from '../presentations/CommentHeader';
 import CommentAdd from '../presentations/CommentAdd';
-import superagent from 'superagent';
+import { APIManager } from '../../utils';
 
 class Comments extends Component {
     
@@ -21,23 +21,16 @@ class Comments extends Component {
     
     componentDidMount() {
         
-        superagent
-            .get('/api/comment')
-            .query(null)
-            .set('Accept', 'application/json')
-            .end((err, response) => {
-                if (err) {
-                    alert('ERROR: ' + err);
-                    return
-                }
+        APIManager.get('api/comment', null, (err, response) => {
+            if (err) {
+                console.log('ERROR COMMENTS FIND: ' + err.message);
+                return
+            }
                 
-                let results = response.body.results;
-                
-                this.setState({
-                    commentList: results
-                })
-                
+            this.setState({
+                commentList: response.results
             });
+        })
     }
     
     // update `body` of current `comment`
@@ -55,24 +48,50 @@ class Comments extends Component {
         event.preventDefault();
         
         let newComment = this.state.comment;
-        newComment.timestamp = new Date();
-        
-        this.setState({
-            commentList: this.state.commentList.concat(newComment)
-        });
         
         // save comment to mongo
+        APIManager.post('/api/comment', newComment, (err, response) => {
+            if (err) {
+                console.log("ERROR: " + err.message, null);
+                return
+            }
+            
+            const result = response.result;
+            
+            console.log("SUCCESS: COMMENT CREATED " +
+                        JSON.stringify(result));
+                        
+            // set the state
+            // result has been processed by the API, so the default
+            // timestamp has been added to the object
+            this.setState({
+                commentList: this.state.commentList.concat(result)
+            });
+        });
+    }
+    
+    deleteHandler(event) {
+        event.preventDefault();
+        
+        // need to generalize to use comment _id
+        //const index = indexOf()
+        //if (index > -1) {
+        //    this.setState({
+        //        commentList: commentList.splice(index, 1)
+        //    });    
+        //}
+        
+        
         superagent
-            .post('/api/comment')
-            .send(newComment)
-            .set('Accept', 'application/json')
+            .delete('/api/comment/588e72d29d964c3b6366da79')
             .end((err, res) => {
-               if (err) {
-                   alert('ERROR: COMMENT POST ' + err);
+                if (err) {
+                   alert('ERROR: COMMENT DELETE ' + err);
                    return
                } 
-               console.log('SUCCESS: COMMENT POST');
-            });
+               console.log('SUCCESS: COMMENT DELETE');
+            })
+       
     }
     
     render() {
@@ -80,7 +99,8 @@ class Comments extends Component {
         const commentList = this.state.commentList.map((x, i) => {
             return (
                 <li key={i} style={{listStyle: 'none'}}>
-                    <Comment commentPropsObj={ x } />
+                    <Comment commentPropsObj={ x } 
+                             deleteHandler={this.deleteHandler.bind(this)} />
                 </li>
             );
         })
@@ -91,7 +111,8 @@ class Comments extends Component {
                 
                 <div style={{padding:12, 
                              background:'#f9f9f9', 
-                             border:'1px solid #ddd'}}>
+                             border:'1px solid #ddd'}}
+                     className="clearfix">
                     <CommentAdd submitHandler={this.submitHandler.bind(this)}
                                 updateBodyHandler={this.updateBodyHandler.bind(this)}/>
                     <br />

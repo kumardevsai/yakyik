@@ -39,9 +39,6 @@ router.get('/:resource', function(req, res, next) {
     });  
 });
 
-function checkResource(controller) {
-    
-}
 
 // return single zone or comment
 router.get('/:resource/:id', function(req, res, next) {
@@ -107,35 +104,35 @@ router.post('/:resource', function(req, res, next) {
 });
 
 // delete a zone or comment to database
-//router.delete('/:resource/:id', function(req, res, next) {
-//    
-//    var resource = req.params.resource;
-//    var id = req.params.id;
-//    var controller = controllers[resource];
-//    
-//    if (controller == null) {
-//        res.json({
-//            confirmation: 'fail',
-//            message: 'Invalid Resource Request: ' + resource
-//        });
-//        return
-//    }
-//    
-//    // result is the payload
-//    controller.destroy(id, function(err) {
-//        if (err) {
-//            res.json({
-//                confirmation: 'fail',
-//                message: 'Not Found'
-//            })
-//            return
-//        }
-//            
-//        res.json({
-//            confirmation: 'success',
-//        });
-//    });
-//    
-//});
+router.delete('/:resource/:id', function(req, res, next) {
+    
+    var resource = req.params.resource;
+    var id = req.params.id;
+    var controller = controllers[resource];
+    
+    if (controller == null) {
+        res.json({
+            confirmation: 'fail',
+            message: 'Invalid Resource Request: ' + resource
+        });
+        return
+    }
+    
+    // result is the payload
+    controller.destroy(id, function(err) {
+        if (err) {
+            res.json({
+                confirmation: 'fail',
+                message: 'Not Found'
+            })
+            return
+        }
+            
+        res.json({
+            confirmation: 'success',
+        });
+    });
+    
+});
 
 module.exports = router;

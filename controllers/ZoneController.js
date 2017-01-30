@@ -35,17 +35,6 @@ module.exports = {
     
     create: function(params, callback) {
         
-        var zips = params['zipCodes'];
-        var zipSplit = zips.split(',');
-        
-        // trim possible white space around the zip codes
-        var newZips = [];
-        zipSplit.forEach(function(zipCode) {
-            newZips.push(zipCode.trim());
-        });
-        
-        params['zipCodes'] = newZips;
-        
         Zone.create(params, function(err, zone) {
             if (err) {
                 callback(err, null);
