@@ -47,10 +47,8 @@ class Comments extends Component {
     submitHandler(event) {
         event.preventDefault();
         
-        let newComment = this.state.comment;
-        
         // save comment to mongo
-        APIManager.post('/api/comment', newComment, (err, response) => {
+        APIManager.post('/api/comment', this.state.comment, (err, response) => {
             if (err) {
                 console.log("ERROR: " + err.message, null);
                 return
@@ -64,8 +62,12 @@ class Comments extends Component {
             // set the state
             // result has been processed by the API, so the default
             // timestamp has been added to the object
+            let updatedCommentList = Object.assign([], this.state.commentList);
+            // this is probably causing keys of li to be messed up
+            updatedCommentList.unshift(result);
             this.setState({
-                commentList: this.state.commentList.concat(result)
+                //commentList: this.state.commentList.concat(result)
+                commentList
             });
         });
     }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Zones from '../containers/Zones';
 import Comments from '../containers/Comments';
+import Nav from './Nav'
 
 class Home extends Component {
     
@@ -18,12 +19,15 @@ class Home extends Component {
     
     render() {
         return (
-            <div className='container'>
-                <div className='col-sm-6'>
-                    <Zones clickHandler={this.zoneClickHandler.bind(this)} />
-                </div>
-                <div className='col-sm-6'>
-                    <Comments currentZone={this.state.currentZone}/>
+            <div>
+                <Nav />
+                <div className='container'>
+                    <div className='col-sm-6'>
+                        <Zones clickHandler={this.zoneClickHandler.bind(this)} />
+                    </div>
+                    <div className='col-sm-6'>
+                        <Comments currentZone={this.state.currentZone}/>
+                    </div>
                 </div>
             </div>
         );
