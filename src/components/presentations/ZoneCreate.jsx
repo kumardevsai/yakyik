@@ -25,7 +25,7 @@ class ZoneCreate extends Component {
     submitHandler(event) {
         event.preventDefault();
 
-        let newZone = this.state.zone;
+        let newZone = Object.assign({}, this.state.zone);
         // zips is a string of zip codes
         let zips = newZone.zipCodes;
         let zipsArray = zips.split(',');
