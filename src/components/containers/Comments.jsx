@@ -63,11 +63,10 @@ class Comments extends Component {
             // result has been processed by the API, so the default
             // timestamp has been added to the object
             let updatedCommentList = Object.assign([], this.state.commentList);
-            // this is probably causing keys of li to be messed up
             updatedCommentList.unshift(result);
             this.setState({
                 //commentList: this.state.commentList.concat(result)
-                commentList
+                commentList: updatedCommentList
             });
         });
     }
@@ -98,9 +97,9 @@ class Comments extends Component {
     
     render() {
         
-        const commentList = this.state.commentList.map((x, i) => {
+        const commentList = this.state.commentList.map((x) => {
             return (
-                <li key={i} style={{listStyle: 'none'}}>
+                <li key={ x._id } style={{listStyle: 'none'}}>
                     <Comment commentPropsObj={ x } 
                              deleteHandler={this.deleteHandler.bind(this)} />
                 </li>

@@ -74,17 +74,19 @@ class Zones extends Component {
             // set the state
             // result has been processed by the API, so the default
             // timestamp has been added to the object
+            let updatedZoneList = Object.assign([], this.state.zoneList);
+            updatedZoneList.unshift(result);
             this.setState({
-                zoneList: this.state.zoneList.concat(result)
+                zoneList: updatedZoneList
             });
         });
     }
     
     render() {
         
-        const listItems = this.state.zoneList.map((x, i) => {
+        const listItems = this.state.zoneList.map((x) => {
             return (
-                <li key= { i }
+                <li key= { x._id }
                     style={{listStyle: 'none'}}>
                     <Zone zonePropsObj={ x } 
                           clickHandler={() => this.props.clickHandler(x.name)} />
