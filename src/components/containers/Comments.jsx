@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Comment from '../presentations/Comment';
 import CommentHeader from '../presentations/CommentHeader';
-import CommentAdd from '../presentations/CommentAdd';
+import CommentCreate from '../presentations/CommentCreate';
 import { APIManager } from '../../utils';
 
 class Comments extends Component {
@@ -10,11 +10,6 @@ class Comments extends Component {
         super()
         
         this.state = {
-            comment: {
-                body: '',
-                username: 'Katie'
-            },
-            
             commentList: []
         }
     }
@@ -33,22 +28,10 @@ class Comments extends Component {
         })
     }
     
-    // update `body` of current `comment`
-    updateBodyHandler(event) {
-        let updatedComment = Object.assign({}, this.state.comment);
-        updatedComment['body'] = event.target.value;
-        
-        this.setState({
-            comment: updatedComment 
-        });
-    }
-    
     // adds the current `comment` object to the `commentList` array
-    submitHandler(event) {
-        event.preventDefault();
-        
+    submitHandler(comment) {
         // save comment to mongo
-        APIManager.post('/api/comment', this.state.comment, (err, response) => {
+        APIManager.post('/api/comment', comment, (err, response) => {
             if (err) {
                 console.log("ERROR: " + err.message, null);
                 return
@@ -114,8 +97,7 @@ class Comments extends Component {
                              background:'#f9f9f9', 
                              border:'1px solid #ddd'}}
                      className="clearfix">
-                    <CommentAdd submitHandler={this.submitHandler.bind(this)}
-                                updateBodyHandler={this.updateBodyHandler.bind(this)}/>
+                    <CommentCreate onCreate={this.submitHandler.bind(this)}/>
                     <br />
                     <ul>
                         { commentList }
