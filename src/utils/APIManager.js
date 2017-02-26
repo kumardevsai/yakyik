@@ -47,7 +47,21 @@ export default {
     put: () => {
         
     },
-    delete: () => {
-        
+    delete: (url, callback) => {
+        superagent
+            .delete(url)
+            .end((err, response) => {
+                if (err) {
+                   alert('ERROR: COMMENT DELETE ' + err);
+                   return
+               } 
+               const confirmation = response.body.confirmation;
+               if (confirmation != 'success') {
+                   callback({message: response.body.message}, null)
+                   return
+               }
+               
+               callback(null, response.body)
+            })
     }
 };

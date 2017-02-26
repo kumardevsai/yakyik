@@ -1,7 +1,9 @@
-var zoneController = require('./ZoneController');
+var ZoneController = require('./ZoneController');
 var CommentController = require('./CommentController');
+var ProfileController = require('./ProfileController');
 // key are named after resource
 module.exports = {
     comment: CommentController,
-    zone: zoneController    
+    zone: ZoneController,
+    profile: ProfileController    
 };

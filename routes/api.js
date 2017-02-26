@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var ZoneController = require('../controllers/ZoneController');
 // index is default file if no file specified
 var controllers = require('../controllers');
 
@@ -130,6 +129,7 @@ router.delete('/:resource/:id', function(req, res, next) {
             
         res.json({
             confirmation: 'success',
+            id: id
         });
     });
     

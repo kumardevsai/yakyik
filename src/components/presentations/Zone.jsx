@@ -1,29 +1,50 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import styles from './zone-styles';
 
-const Zones = (props) => {
+class Zones extends Component {
     
-    let timestamp = props.zonePropsObj.timestamp;
-    if (typeof timestamp == 'string') {
-        timestamp = new Date(timestamp);
+    clickHandler(event) {
+        event.preventDefault();
+        this.props.zoneClickHandler(event.target.id);
     }
-    
-    return(
-        <div style={ styles.container }>
-            <h2 style={ styles.header }>
+
+    render() {
+        let timestamp = this.props.zonePropsObj.timestamp;
+        if (typeof timestamp == 'string') {
+            timestamp = new Date(timestamp);
+        }
+        
+        const title = (this.props.isSelected) 
+            ? (
                 <a style={ styles.title } 
-                   onClick={ props.clickHandler }
-                   href="#">
-                   { props.zonePropsObj.name }
+                    id={ this.props.zoneID }
+                    onClick={ this.clickHandler.bind(this) }
+                    href="#">
+                    { this.props.zonePropsObj.name }
                 </a>
-                <br/>
-            </h2>
-            <span>{ props.zonePropsObj.zipCodes }</span>
-            <br />
-            <span>{ timestamp.toDateString() }</span>
-        </div>         
-    );    
+              )
+            : (
+                <a onClick={ this.clickHandler.bind(this) }
+                    id = { this.props.zoneID }
+                    href="#">
+                    { this.props.zonePropsObj.name }
+                </a>
+              );
+        
+        return(
+            <div style={ styles.container }>
+                <h2 style={ styles.header }>
+                    { title }
+                    <br/>
+                </h2>
+                <p>{ title }</p>
+                <span>{ this.props.zonePropsObj.zipCodes }</span>
+                <br />
+                <span>{ timestamp.toDateString() }</span>
+            </div>         
+        );
+    }    
 }
 
 export default Zones;

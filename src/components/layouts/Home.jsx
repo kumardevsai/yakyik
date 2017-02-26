@@ -1,37 +1,27 @@
-import React, { Component } from 'react';
+import React from 'react';
+
 import Zones from '../containers/Zones';
 import Comments from '../containers/Comments';
-import Nav from './Nav'
+import Nav from '../presentations/Nav'
+import Account from '../containers/Account';
 
-class Home extends Component {
-    
-    constructor() {
-        super()
-        
-        this.state = {
-            currentZone: "Zone 1"
-        }
-    }
-    
-    zoneClickHandler(zoneName) {
-        this.setState({currentZone: zoneName});
-    }
-    
-    render() {
-        return (
-            <div>
-                <Nav />
-                <div className='container'>
-                    <div className='col-sm-6'>
-                        <Zones clickHandler={this.zoneClickHandler.bind(this)} />
-                    </div>
-                    <div className='col-sm-6'>
-                        <Comments currentZone={this.state.currentZone}/>
-                    </div>
+const Home = (props) => {
+
+    return (
+        <div>
+            <Nav />
+            <div className='container'>
+                <div className='col-sm-6'>
+                    <Account />
+                    <Zones />
+                </div>
+                <div className='col-sm-6'>
+                    <Comments />
                 </div>
             </div>
-        );
-    }
+        </div>
+    );
+    
 }
 
 export default Home;

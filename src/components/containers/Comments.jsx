@@ -3,6 +3,9 @@ import Comment from '../presentations/Comment';
 import CommentHeader from '../presentations/CommentHeader';
 import CommentCreate from '../presentations/CommentCreate';
 import { APIManager } from '../../utils';
+import { connect } from 'react-redux';
+import actions from '../../redux/actions';
+import store from '../../redux/store'
 
 class Comments extends Component {
     
@@ -21,15 +24,38 @@ class Comments extends Component {
                 console.log('ERROR COMMENTS FIND: ' + err.message);
                 return
             }
-                
+
+            let comments = response.results;
+
             this.setState({
-                commentList: response.results
+                commentList: comments
             });
         })
     }
     
+    // only show comments specific to selected zone
+    zoneComments() {
+        selectedZone = this.props.selectedZone
+        
+        let updatedCommentList = Object.assign([], this.state.commentList);
+        
+        if (selectedZone) {
+            updatedCommentList = updatedCommentList.filter((obj) => {
+                return obj.zone == selectedZone;
+            })
+        }
+        
+        this.setState({
+            commentList: updatedCommentList
+        })
+    }
+
     // adds the current `comment` object to the `commentList` array
     submitHandler(comment) {
+        // add current zone to comment
+        
+        comment.zone = this.props.selectedZone; 
+        console.log(comment);
         // save comment to mongo
         APIManager.post('/api/comment', comment, (err, response) => {
             if (err) {
@@ -39,8 +65,8 @@ class Comments extends Component {
             
             const result = response.result;
             
-            console.log("SUCCESS: COMMENT CREATED " +
-                        JSON.stringify(result));
+            //console.log("SUCCESS: COMMENT CREATED " +
+            //            JSON.stringify(result));
                         
             // set the state
             // result has been processed by the API, so the default
@@ -54,44 +80,42 @@ class Comments extends Component {
         });
     }
     
-    deleteHandler(event) {
+    deleteHandler(id) {
         event.preventDefault();
         
-        // need to generalize to use comment _id
-        //const index = indexOf()
-        //if (index > -1) {
-        //    this.setState({
-        //        commentList: commentList.splice(index, 1)
-        //    });    
-        //}
-        
-        
-        superagent
-            .delete('/api/comment/588e72d29d964c3b6366da79')
-            .end((err, res) => {
-                if (err) {
-                   alert('ERROR: COMMENT DELETE ' + err);
-                   return
-               } 
-               console.log('SUCCESS: COMMENT DELETE');
+        APIManager.delete('/api/delete/' + id, (err, response) => {
+            if (err) {
+                console.log("ERROR: " + err.message, null);
+                return
+            }
+                        
+            let updatedCommentList = Object.assign([], this.state.commentList);
+            updatedCommentList = updatedCommentList.filter(function(obj) {
+                return obj._id !== response.id;
             })
-       
+            
+            this.setState({
+                commentList: updatedCommentList
+            });
+        });
     }
-    
+
     render() {
-        
+
+        const selZ = this.props.zoneList[this.props.selectedZone];
+        const zoneName = (selZ==null) ? '' : selZ.name;
         const commentList = this.state.commentList.map((x) => {
             return (
                 <li key={ x._id } style={{listStyle: 'none'}}>
                     <Comment commentPropsObj={ x } 
-                             deleteHandler={this.deleteHandler.bind(this)} />
+                             deleteHandler={this.deleteHandler.bind(this, x._id)} />
                 </li>
             );
         })
         
         return (
             <div>
-                <CommentHeader zoneName={this.props.currentZone} />
+                <CommentHeader zoneName={zoneName} />
                 
                 <div style={{padding:12, 
                              background:'#f9f9f9', 
@@ -108,4 +132,11 @@ class Comments extends Component {
     }
 }
 
-export default Comments;
+const stateToProps = (state) => {
+    return {
+        selectedZone: state.zone.selectedZone,
+        zoneList: state.zone.zoneList
+    }
+}
+
+export default connect(stateToProps)(Comments);

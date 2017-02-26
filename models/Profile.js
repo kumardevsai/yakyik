@@ -1,22 +1,18 @@
 var mongoose = require('mongoose');
 
-var CommentSchema = new mongoose.Schema({
+var ProfileSchema = new mongoose.Schema({
     username: {
         type: String,
         default: '' 
     },
-    body: {
+    password: {
         type: String,
-        default: '' 
+        default:'' 
     },
     timestamp: {
         type: Date, 
         default: new Date()
-    },
-    zone: {
-        type: String,
-        default: ''
     }
 });
 
-module.exports = mongoose.model('CommentSchema', CommentSchema);
+module.exports = mongoose.model('ProfileSchema', ProfileSchema);
