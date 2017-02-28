@@ -6,8 +6,7 @@ class CommentCreate extends Component {
 
         this.state = {
             comment: {
-                body: '',
-                username: 'Katie'
+                body: ''
             }
         }
     }

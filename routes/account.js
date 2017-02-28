@@ -19,8 +19,8 @@ router.get('/:action', function(req, res, next) {
         
         if (req.session == null) {
             res.json({
-                confirmation: 'fail',
-                message: 'User not logged in'
+                confirmation: 'success',
+                user: null
             });
             return;
         }
@@ -28,13 +28,34 @@ router.get('/:action', function(req, res, next) {
         // e.g. session for a shopping cart
         if (req.session.user == null) {
             res.json({
-                confirmation: 'fail',
-                message: 'User not logged in'
+                confirmation: 'success',
+                user: null
             })
             return;
         }
 
         ProfileController.findById(req.session.user, function(err, result) {
+            if (err) {
+                res.json({
+                    confirmation: 'fail',
+                    message: err
+                });
+
+                return;
+            }
+
+            res.json({
+                confirmation: 'success',
+                user: result 
+            });
+        })
+
+        
+    }
+
+    if (action == 'user') {
+
+        ProfileController.find(null, function(err, result) {
             if (err) {
                 res.json({
                     confirmation: 'fail',
@@ -59,7 +80,7 @@ router.post('/:action', function(req, res, next) {
     var action = req.params.action;    
     
     // registers a new profile and logs the user in
-    if (action == 'profile') {
+    if (action == 'user') {
         ProfileController.create(req.body, function(err, result) {
             if (err) {
                 res.json({
@@ -124,7 +145,7 @@ router.post('/:action', function(req, res, next) {
 
             res.json({
                 confirmation: 'success',
-                profile: profile
+                user: profile
             });
         });
     }

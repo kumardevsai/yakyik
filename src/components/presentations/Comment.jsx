@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 
 const Comment = (props) => {
     
@@ -15,7 +16,10 @@ const Comment = (props) => {
                         {props.commentPropsObj.body}
                     </p>
                     <p style={{color: '#808080', fontWeight:200}}>
-                        {props.commentPropsObj.username} | { timestamp.toDateString() }
+                        <Link to={"/user/" + props.commentPropsObj.username}>
+                            {props.commentPropsObj.username}
+                        </Link> | 
+                        { timestamp.toDateString() }
                     </p>
                 </div>
                 <div className="col-xs-2">

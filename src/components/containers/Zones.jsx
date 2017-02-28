@@ -5,18 +5,9 @@ import ZoneCreate from '../presentations/ZoneCreate';
 import { APIManager } from '../../utils';
 import { connect } from 'react-redux';
 import actions from '../../redux/actions';
-import store from '../../redux/store'
+//import store from '../../redux/store'
 
 class Zones extends Component {
-    
-    constructor() {
-        super()
-        
-        this.state = {
-            //selected: 0 // index number of selected zone
-            //zoneList: [] now in redux store
-        }
-    }
     
     componentDidMount() {
         
@@ -26,17 +17,11 @@ class Zones extends Component {
                 return
             }
 
-            
             const zones = response.results;
             // REDUX ACTION!!
             //store.currentStore()
             //    .dispatch(actions.zonesReceived(zones))
             this.props.zonesReceived(zones);
-
-            //this.setState({
-            //    zoneList: zones
-            //});
-
         })
     }
     
@@ -48,25 +33,15 @@ class Zones extends Component {
                 console.log("ERROR ZONE POST: " + err.message, null);
                 return;
             }
-            
+            // result has been processed by the API, so the default
+            // timestamp has been added to the object
             const zone = response.result;
 
             this.props.zoneCreate(zone);           
-            // set the state
-            // result has been processed by the API, so the default
-            // timestamp has been added to the object
-            //let updatedZoneList = Object.assign([], this.props.zoneList);
-            //updatedZoneList.unshift(zone);
-            //this.setState({
-            //    zoneList: updatedZoneList
-            //});
         });
     }
 
     zoneClickHandler(zoneID) {
-        //this.setState({
-        //    selected: zoneIndex
-        //});
         this.props.zoneSelected(zoneID);
     }
 
