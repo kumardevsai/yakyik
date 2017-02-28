@@ -1,8 +1,15 @@
 import React, { Component } from 'react';
 import UserComments from '../containers/UserComments';
+import APIManager from '../../utils/APIManager';
 
 // accessed by react-router so has this.props.params
 class UserInfo extends Component {
+    
+    //componentDidMount() {
+    //    console.log('componentDidMount: '+ this.props.username)
+        //APIManager.find('../api/user')
+    //}
+    
     render() {
         return (
             <div className="row">

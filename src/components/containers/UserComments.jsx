@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Comment from '../presentations/Comment';
 import APIManager from '../../utils/APIManager';
-import CommentHeader from '../presentations/CommentHeader';
 
 class UserComments extends Component {
     
@@ -11,6 +10,7 @@ class UserComments extends Component {
         this.state = {
             // all comment from by selected user
             commentList: [],
+            user: null
         }
     }
 
@@ -18,16 +18,36 @@ class UserComments extends Component {
         
         const params = {username: this.props.username };
 
-        APIManager.get('../api/comment', params, (err, response) => {
+        console.log(JSON.stringify(params));
+
+        APIManager.get('/api/comment', params, (err, response) => {
             if (err) {
                 console.log('ERROR COMMENTS FIND: ' + err.message);
                 return
             }
 
             let comments = response.results;
-
+            console.log('LOAD_COMMENTS: ' + JSON.stringify(comments));
             this.setState({
                 commentList: comments
+            })
+        })
+
+        APIManager.get('/api/user', params, (err, response) => {
+            if (err) {
+                console.log('ERROR COMMENTS FIND: ' + err.message);
+                return;   
+            }
+
+            if (response.result.length == 0) {
+                alert('User not found');
+                return;
+            }
+
+            const user = response.results[0];
+            //console.log('LOAD_USER: ' + JSON.stringify(user));
+            this.setState({
+                user: user
             })
         })
     }

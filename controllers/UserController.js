@@ -2,39 +2,39 @@
 // pure of a javascript file as possbile.  Besides require and
 // module.exports it should no nothing about node, express, etc.
 
-var Profile = require('../models/Profile');
+var User = require('../models/User');
 var bcrypt = require('bcrypt');
 
 module.exports = {
     
     find: function(params, callback) {
         
-        Profile.find(params, function(err, profiles) {
+        User.find(params, function(err, users) {
             if (err) {
                 callback(err, null)
                 return
             }
             
-            callback(null, profiles);
+            callback(null, users);
         })
     },
     
     findById: function(id, callback) {
-        Profile.findById(id, function(err, profile) {
+        User.findById(id, function(err, user) {
             // check for error
             if (err) {
                 callback(err, null);
                 return
             }
             // if no error run callback
-            callback(null, profile);
+            callback(null, user);
         })
     },
     
     create: function(params, callback) {
         params.password = bcrypt.hashSync(params.password, 10);
 
-        Profile.create(params, function(err, profile) {
+        User.create(params, function(err, user) {
             if (err) {
                 callback(err, null);
                 return
@@ -45,18 +45,18 @@ module.exports = {
     },
     
     update: function(id, params, callback) {
-        Profile.findByIdAndUpdate(id, params, {new: true}, function(err, profile) {
+        User.findByIdAndUpdate(id, params, {new: true}, function(err, user) {
             if (err) {
                 callback(err, null);
                 return
             }
             
-            callback(null, profile);
+            callback(null, user);
         });
     },
     
     destroy: function(id, callback) {
-        Zone.findByIdAndRemove(id, function(err) {
+        User.findByIdAndRemove(id, function(err) {
             if (err) {
                 callback(err, null);
                 return

@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var ProfileController = require('../controllers/ProfileController');
+var UserController = require('../controllers/UserController');
 var bcrypt = require('bcrypt');
 
 router.get('/:action', function(req, res, next) {
@@ -34,7 +34,7 @@ router.get('/:action', function(req, res, next) {
             return;
         }
 
-        ProfileController.findById(req.session.user, function(err, result) {
+        UserController.findById(req.session.user, function(err, result) {
             if (err) {
                 res.json({
                     confirmation: 'fail',
@@ -55,7 +55,7 @@ router.get('/:action', function(req, res, next) {
 
     if (action == 'user') {
 
-        ProfileController.find(null, function(err, result) {
+        UserController.find(null, function(err, result) {
             if (err) {
                 res.json({
                     confirmation: 'fail',
@@ -79,9 +79,9 @@ router.post('/:action', function(req, res, next) {
 
     var action = req.params.action;    
     
-    // registers a new profile and logs the user in
+    // registers a new user and logs the user in
     if (action == 'user') {
-        ProfileController.create(req.body, function(err, result) {
+        UserController.create(req.body, function(err, result) {
             if (err) {
                 res.json({
                     confirmation: 'fail',
@@ -101,7 +101,7 @@ router.post('/:action', function(req, res, next) {
 
     if (action == 'login') {
         var params = {username: req.body.username}; 
-        ProfileController.find(params, function(err, results) {
+        UserController.find(params, function(err, results) {
             if (err) {
                 console.log('ERR: ' + err);
                 res.json({
@@ -123,15 +123,15 @@ router.post('/:action', function(req, res, next) {
 
             // grab the user
             // TODO: add check that this is unique username
-            var profile = results[0];
+            var user = results[0];
         
             // check password
             var isPasswordCorrect = bcrypt.compareSync(
                 req.body.password, 
-                profile.password);
+                user.password);
             
             // track id in session to track logged in user
-            req.session.user = profile._id
+            req.session.user = user._id
 
             if (!isPasswordCorrect) {
                 console.log('ERR: incorect password');
@@ -145,7 +145,7 @@ router.post('/:action', function(req, res, next) {
 
             res.json({
                 confirmation: 'success',
-                user: profile
+                user: user
             });
         });
     }
