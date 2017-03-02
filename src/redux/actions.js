@@ -28,5 +28,12 @@ export default {
             type: constants.CURRENT_USER_RECEIVED,
             user: user
         }
+    },
+
+    userReceived: (user) => {
+        return {
+            type: constants.USER_RECEIVED,
+            user: user
+        }
     }
 }

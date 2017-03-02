@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { APIManager } from '../../utils';
 import { connect } from 'react-redux';
 import actions from '../../redux/actions';
+import { Link } from 'react-router';
 
 class Account extends Component {
     constructor() {
@@ -116,7 +117,8 @@ class Account extends Component {
                     type="text" /><br />
                 <input id="password" 
                     onChange={this.updateUser.bind(this)} 
-                    type="password" /><br />
+                    type="password"
+                    placeholder="password" /><br />
                 <button onClick={this.login.bind(this)}>Login</button>
                 <h2>Sign Up</h2>
                 <input id="username" 
@@ -125,13 +127,25 @@ class Account extends Component {
                     type="text" /><br />
                 <input id="password" 
                     onChange={this.updateUser.bind(this)} 
-                    type="password" /><br />
+                    type="password"
+                    placeholder="password" /><br />
+                <input id="gender" 
+                    onChange={this.updateUser.bind(this)} 
+                    type="text"
+                    placeholder="gender" /><br />
+                <input id="city" 
+                    onChange={this.updateUser.bind(this)} 
+                    type="text"
+                    placeholder="city" /><br />
                 <button onClick={this.signup.bind(this)}>Register</button>
             </div>
         } else {
             out = <div>
                     <h1>Welcome {this.props.user.username}</h1>
                     <button onClick={this.logout.bind(this)}>Logout</button>
+                    <Link to={"/account/" + this.props.user.username}>
+                        <button>Manage Profile</button>
+                    </Link>
                 </div>
         }
         return (

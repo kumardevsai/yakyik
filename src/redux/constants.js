@@ -3,5 +3,9 @@ export default {
     ZONE_CREATE: 'ZONE_CREATE',
     ZONE_SELECTED: 'ZONE_SELECTED',
     
-    CURRENT_USER_RECEIVED: 'CURRENT_USER_RECEIVED'
+    // current logged in user
+    CURRENT_USER_RECEIVED: 'CURRENT_USER_RECEIVED',
+
+    // profile info for any user
+    USER_RECEIVED: 'USER_RECEIVED'
 }

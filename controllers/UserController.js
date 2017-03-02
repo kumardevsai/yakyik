@@ -40,7 +40,7 @@ module.exports = {
                 return
             }
             
-            callback(null, profile);
+            callback(null, user);
         });
     },
     
