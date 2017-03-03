@@ -1,4 +1,5 @@
 import constants from './constants';
+import APIManager from '../utils/APIManager';
 
 export default {
 
@@ -34,6 +35,35 @@ export default {
         return {
             type: constants.USER_RECEIVED,
             user: user
+        }
+    },
+
+    fetchZones: (params) => {
+        return (dispatch) => {
+            
+            dispatch({
+                type: constants.APPLICATION_STATE,
+                status: 'loading'
+            })
+            
+            APIManager.get('/api/zone', params, (err, response) => {
+                if (err) {
+                    alert('ERROR ZONE FIND: ' + err.message);
+                    return
+                }
+
+                const zones = response.results;
+                dispatch({
+                    type: constants.ZONES_RECEIVED,
+                    zones: zones
+                })
+                //setTimeout(() => {
+                //    dispatch({
+                //        type: constants.ZONES_RECEIVED,
+                //        zones: zones
+                //    })
+                //}, 3000)
+            })
         }
     }
 }

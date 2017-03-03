@@ -2,7 +2,8 @@ import constants from '../constants'
 
 var initialState = {
     zoneList: [],
-    selectedZone: null
+    selectedZone: null,
+    appStatus: 'ready'
 }
 
 export default (state = initialState, action) => {
@@ -12,6 +13,7 @@ export default (state = initialState, action) => {
 
         case constants.ZONES_RECEIVED:
             updated['zoneList'] = action.zones;
+            updated['appStatus'] = 'ready';
             // equivalent to running this.setState({zoneList: updated}) in react
             return updated 
         
@@ -25,6 +27,10 @@ export default (state = initialState, action) => {
         case constants.ZONE_SELECTED:
             console.log('ZONE_SELECTED: ' + JSON.stringify(action.selectedZone))
             updated.selectedZone = action.selectedZone;
+            return updated;
+        
+        case constants.APPLICATION_STATE:
+            updated['appStatus'] = action.status;
             return updated;
 
         default:

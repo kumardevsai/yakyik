@@ -1,4 +1,6 @@
 export default {
+    APPLICATION_STATE: 'APPLICATION_STATE',
+    
     ZONES_RECEIVED: 'ZONES_RECEIVED',
     ZONE_CREATE: 'ZONE_CREATE',
     ZONE_SELECTED: 'ZONE_SELECTED',
@@ -8,4 +10,5 @@ export default {
 
     // profile info for any user
     USER_RECEIVED: 'USER_RECEIVED'
+
 }

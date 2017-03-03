@@ -10,23 +10,10 @@ import actions from '../../redux/actions';
 class Zones extends Component {
     
     componentDidMount() {
-        
-        APIManager.get('api/zone', null, (err, response) => {
-            if (err) {
-                alert('ERROR ZONE FIND: ' + err.message);
-                return
-            }
-
-            const zones = response.results;
-            // REDUX ACTION!!
-            //store.currentStore()
-            //    .dispatch(actions.zonesReceived(zones))
-            this.props.zonesReceived(zones);
-        })
+        this.props.fetchZones(null);
     }
     
     updateZoneList(zone) {
-        
         // save zoneList state and save to mongo
         APIManager.post('/api/zone', zone, (err, response) => {
             if (err) {
@@ -60,27 +47,35 @@ class Zones extends Component {
             );
         });
         
-        return (
-            <div>
+        let content = null;
+        if (this.props.appStatus == 'loading') {
+            content = <h3>LOADING...</h3>;
+        } else if (this.props.appStatus == 'ready') {
+            content = <div>
                 <ZoneCreate updateZoneList={this.updateZoneList.bind(this)} />
                 <ul>
                     { listItems }
                 </ul>
             </div>
-        );
+        }
+
+        return content;
     }
 }
 
 const stateToProps = (state) => {
     return {
         zoneList: state.zone.zoneList,
-        selectedZone: state.zone.selectedZone
+        selectedZone: state.zone.selectedZone,
+        appStatus: state.zone.appStatus
     }
 }
 
 const dispatchToProps = (dispatch) => {
     return {
-        zonesReceived: (zones) => dispatch(actions.zonesReceived(zones)),
+        fetchZones: (params) => dispatch(actions.fetchZones(params)),
+        // moved into redux with fetchZones
+        //zonesReceived: (zones) => dispatch(actions.zonesReceived(zones)),
         zoneCreate: (zone) => dispatch(actions.zoneCreate(zone)),
         zoneSelected: (zoneIndex) => dispatch(actions.zoneSelected(zoneIndex))
     }

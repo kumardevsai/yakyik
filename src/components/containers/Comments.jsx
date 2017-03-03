@@ -4,7 +4,6 @@ import CommentHeader from '../presentations/CommentHeader';
 import CommentCreate from '../presentations/CommentCreate';
 import { APIManager } from '../../utils';
 import { connect } from 'react-redux';
-import actions from '../../redux/actions';
 
 class Comments extends Component {
     

@@ -144,7 +144,7 @@ class Account extends Component {
                     <h1>Welcome {this.props.user.username}</h1>
                     <button onClick={this.logout.bind(this)}>Logout</button>
                     <Link to={"/account/" + this.props.user.username}>
-                        <button>Manage Profile</button>
+                        <button>Profile</button>
                     </Link>
                 </div>
         }
