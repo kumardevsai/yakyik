@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import actions from '../../redux/actions';
 
 class CurrentUser extends Component {
     
@@ -7,26 +8,31 @@ class CurrentUser extends Component {
         super()
 
         this.state = {
-            updated: {}
+            updatedUser: {}
         }
     }
 
-    updateCurrentUser(event) {
+    updateUserState(event) {
         event.preventDefault();
-        let updated = Object.assign({}, this.state.updated);
+        let updated = Object.assign({}, this.state.updatedUser);
 
         updated[event.target.id] = event.target.value; 
         
         this.setState({
-            updated: updated
+            updatedUser: updated
         })
         
     }
 
-    updateProfile(event) {
+    updateUserRedux(event) {
         event.preventDefault();
 
-        console.log('UpdateProfile: ' + JSON.stringify(this.state.updated));
+        if (Object.keys(this.state.updatedUser).length == 0) {
+            alert('No Changes Made!!');
+            return;
+        }
+
+        this.props.updateUser(this.props.user._id, this.state.updatedUser);
     }
 
     render() {
@@ -40,16 +46,16 @@ class CurrentUser extends Component {
                     id ="city" 
                     placeholder={currentUser.city} 
                     defaultValue={currentUser.city}
-                    onChange={this.updateCurrentUser.bind(this)}/>
+                    onChange={this.updateUserState.bind(this)}/>
                 <br />
                 City: <input 
                     type="text" 
                     id ="gender" 
                     placeholder={currentUser.gender} 
                     defaultValue={currentUser.gender}
-                    onChange={this.updateCurrentUser.bind(this)}/>
+                    onChange={this.updateUserState.bind(this)}/>
                 <br />
-                <button type="submit" onClick={this.updateProfile.bind(this)}>Submit</button>
+                <button type="submit" onClick={this.updateUserRedux.bind(this)}>Submit</button>
             </div>
         )
     }
@@ -61,4 +67,10 @@ const stateToProps = (state) => {
     }
 }
 
-export default connect(stateToProps)(CurrentUser);
+const dispatchToProps = (dispatch) => {
+    return {
+        updateUser: (id, updatedUser) => dispatch(actions.updateUser(id, updatedUser))
+    }
+}
+
+export default connect(stateToProps, dispatchToProps)(CurrentUser);

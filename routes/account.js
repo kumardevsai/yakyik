@@ -127,8 +127,30 @@ router.post('/:action', function(req, res, next) {
         });
     }
 
-    
-
 });
+
+router.put('/:action/:id', function(req, res, next) {
+
+    var action = req.params.action;    
+
+    // registers a new user and logs the user in
+    if (action == 'user') {
+        var id = req.params.id;
+        UserController.update(id, req.body, function(err, result) {
+            if (err) {
+                res.json({
+                    confirmation: 'fail',
+                    message: err.message
+                });
+                return;
+            }
+
+            res.json({
+                confirmation: 'success',
+                user: result
+            });
+        })
+    }
+})
 
 module.exports = router;

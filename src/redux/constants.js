@@ -7,6 +7,7 @@ export default {
     
     // current logged in user
     CURRENT_USER_RECEIVED: 'CURRENT_USER_RECEIVED',
+    USER_PROFILE_UPDATED: 'USER_PROFILE_UPDATED',
 
     // profile info for any user
     USER_RECEIVED: 'USER_RECEIVED'

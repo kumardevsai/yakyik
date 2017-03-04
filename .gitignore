@@ -2,3 +2,4 @@
 .env
 /public/build/
 npm-debug.log
+/public/theme/

@@ -65,5 +65,27 @@ export default {
                 //}, 3000)
             })
         }
+    },
+
+    updateUser: (id, updatedUser) => {
+        return (dispatch) => {
+            
+            const endpoint = '/account/user/' + id;
+            
+            APIManager.put(endpoint, updatedUser, (err, response) => {
+                if (err) {
+                    alert('ERROR USER PROFILE UPDATE: ' + err.message);
+                    return;
+                }
+
+                const updatedUser = response.user;
+                dispatch({
+                    type: constants.USER_PROFILE_UPDATED,
+                    user: updatedUser
+                })
+
+                //console.log('Profile Updates: ' + JSON.stringify(response));
+            })
+        }
     }
 }
