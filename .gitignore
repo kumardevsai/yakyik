@@ -1,5 +1,5 @@
 /node_modules/
-.env
+.env.js
 /public/build/
 npm-debug.log
 /public/theme/
