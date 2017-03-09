@@ -17,6 +17,10 @@ var UserSchema = new mongoose.Schema({
         type: String,
         default:'' 
     },
+    image: {
+        type: String,
+        default:''
+    },
     timestamp: {
         type: Date, 
         default: new Date()

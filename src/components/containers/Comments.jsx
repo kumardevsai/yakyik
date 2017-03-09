@@ -41,6 +41,7 @@ class Comments extends Component {
         // add current zone to comment
         comment.zone = this.props.selectedZone; 
         comment.username = this.props.user.username;
+        comment.author = this.props.user;
         
         // save comment to mongo
         APIManager.post('/api/comment', comment, (err, response) => {

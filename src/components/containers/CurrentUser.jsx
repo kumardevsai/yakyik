@@ -34,7 +34,7 @@ class CurrentUser extends Component {
             alert('No Changes Made!!');
             return;
         }
-
+        console.log(this.state.updatedUser);
         this.props.updateUser(this.props.user._id, this.state.updatedUser);
     }
 

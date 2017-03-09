@@ -5,6 +5,10 @@ var CommentSchema = new mongoose.Schema({
         type: String,
         default: '' 
     },
+    author: {
+        type: mongoose.Schema.Types.Mixed,
+        default: {}
+    },
     body: {
         type: String,
         default: '' 

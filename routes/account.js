@@ -50,6 +50,25 @@ router.get('/:action', function(req, res, next) {
             });
         })   
     }
+
+    if (action == 'users') {
+
+        UserController.find(null, function(err, result) {
+            if (err) {
+                res.json({
+                    confirmation: 'fail',
+                    message: err
+                });
+
+                return;
+            }
+
+            res.json({
+                confirmation: 'success',
+                user: result 
+            });
+        })   
+    }
 });
 
 router.post('/:action', function(req, res, next) {
