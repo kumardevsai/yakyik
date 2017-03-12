@@ -40,13 +40,11 @@ class Comment extends Component {
         this.toggleEditView(event);
 
         const commentUpdated = this.state.commentUpdated;
-        console.log(commentUpdated)
+        
         // do not make update if no change occurred
         if (commentUpdated.body == '') return;
-        console.log(commentUpdated);
+
         this.props.editHandler(commentUpdated);
-        
-        console.log(event.target.value)
     }
 
     render() {

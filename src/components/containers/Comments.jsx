@@ -68,7 +68,7 @@ class Comments extends Component {
                 commentList: updatedCommentList
             });
         });
-        }
+    }
 
     deleteHandler(id) {
         
@@ -95,7 +95,7 @@ class Comments extends Component {
     }
 
     editHandler(commentId, commentUpdated) {
-        console.log("Edit Handled: " + commentId + " : " + commentUpdated.body);
+        //console.log("Edit Handled: " + commentId + " : " + commentUpdated.body);
 
         APIManager.put('/api/comment/' + commentId, commentUpdated, (err, response) => {
             if (err) {
