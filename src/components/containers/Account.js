@@ -10,7 +10,9 @@ class Account extends Component {
         this.state = {
             user: {
                 username: '',
-                password: ''
+                password: '',
+                gender: '',
+                city: ''
             }
         }
     }
@@ -34,6 +36,10 @@ class Account extends Component {
         
         let updatedUser = Object.assign({}, this.state.user);
         updatedUser[event.target.id] = event.target.value;
+
+        if (this.state.user.gender == "Female") {
+            updatedUser.image = "https://res.cloudinary.com/hbpf9lgrd/image/upload/v1489253740/mk1hu1remov6gijoa5av.png"
+        }
 
         this.setState({
             user: updatedUser

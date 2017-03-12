@@ -18,20 +18,25 @@ class UserProfile extends Component {
 
     componentDidMount() {
         
-        const params = { username: this.props.username };
+        //const params1 = { author: {
+        //        id: this.props._id,
+        //        username: this.props.username,
+        //        image: this.props.image 
+        //    }
+        //};
 
-        APIManager.get('/api/comment', params, (err, response) => {
-            if (err) {
-                console.log('ERROR COMMENTS FIND: ' + err.message);
-                return
-            }
+        //APIManager.get('/api/comment', params1, (err, response) => {
+        //    if (err) {
+        //        console.log('ERROR COMMENTS FIND: ' + err.message);
+         //       return
+         //   }
 
-            let comments = response.results;
+         //   let comments = response.results;
             //console.log('LOAD_COMMENTS: ' + JSON.stringify(comments));
-            this.setState({
-                commentList: comments
-            })
-        })
+         //   this.setState({
+         //       commentList: comments
+         //   })
+       // })
 
         // this will only call the API if the user has not yet been loaded
         //console.log('usersMap: ', this.props.usersMap);
@@ -40,7 +45,8 @@ class UserProfile extends Component {
                     user: this.props.usersMap[this.props.username]
             })
         } else {
-            // gets all user infor for username == this.props.username
+            const params = { username: this.props.username };
+            // gets all user info for username == this.props.username
             APIManager.get('/api/user', params, (err, response) => {
                 if (err) {
                     console.log('ERROR COMMENTS FIND: ' + err.message);

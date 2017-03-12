@@ -39,9 +39,14 @@ class Comments extends Component {
     // adds the current `comment` object to the `commentList` array
     submitHandler(comment) {
         // add current zone to comment
+        const user = this.props.user
+        
         comment.zone = this.props.selectedZone; 
-        comment.username = this.props.user.username;
-        comment.author = this.props.user;
+        comment.author = {
+            id: user._id,
+            username: user.username,
+            image: user.image
+        }
         
         // save comment to mongo
         APIManager.post('/api/comment', comment, (err, response) => {
@@ -63,10 +68,9 @@ class Comments extends Component {
                 commentList: updatedCommentList
             });
         });
-    }
+        }
 
     deleteHandler(id) {
-        event.preventDefault();
         
         APIManager.delete('/api/comment/' + id, (err, response) => {
             if (err) {
@@ -77,12 +81,42 @@ class Comments extends Component {
             let updatedCommentsAll = Object.assign([], this.state.commentsAll);            
             let updatedCommentList = Object.assign([], this.state.commentList);
             updatedCommentList = updatedCommentList.filter(function(obj) {
-                return obj._id !== response.id;
+                 return obj._id !== response.id;
             });
             updatedCommentsAll = updatedCommentsAll.filter(function(obj) {
                 return obj._id !== response.id;
             });
             
+            this.setState({
+                commentList: updatedCommentList,
+                commentsAll: updatedCommentsAll
+            });
+        });
+    }
+
+    editHandler(commentId, commentUpdated) {
+        console.log("Edit Handled: " + commentId + " : " + commentUpdated.body);
+
+        APIManager.put('/api/comment/' + commentId, commentUpdated, (err, response) => {
+            if (err) {
+                console.log("ERROR: " + err.message, null);
+                return
+            }
+
+            let updatedCommentsAll = Object.assign([], this.state.commentsAll);            
+            let updatedCommentList = Object.assign([], this.state.commentList);
+            updatedCommentList = updatedCommentList.filter(function(obj) {
+                if (obj._id == commentId) {
+                    obj.body = commentUpdated.body
+                }
+                return obj;
+            });
+            updatedCommentsAll = updatedCommentsAll.filter(function(obj) {
+                if (obj._id == commentId) {
+                    obj.body = commentUpdated.body
+                }
+                return obj;
+            });
             this.setState({
                 commentList: updatedCommentList,
                 commentsAll: updatedCommentsAll
@@ -114,12 +148,22 @@ class Comments extends Component {
         const selZ = this.props.zoneList.filter(obj => {
             return obj._id == this.props.selectedZone;
         })[0];
+
         const zoneName = (selZ==null) ? '' : selZ.name;
+        const currentUser = this.props.user; // null if not logged in
+        
         const commentList = this.state.commentList.map((x) => {
+            let editable = false;
+            if (currentUser._id == x.author.id) {
+                editable = true;
+            }
+            
             return (
                 <li key={ x._id } style={{listStyle: 'none'}}>
                     <Comment commentPropsObj={ x } 
-                             deleteHandler={this.deleteHandler.bind(this, x._id)} />
+                             deleteHandler={this.deleteHandler.bind(this, x._id)}
+                             editable = {editable}
+                             editHandler = {this.editHandler.bind(this, x._id)} />
                 </li>
             );
         })
