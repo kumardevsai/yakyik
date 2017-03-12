@@ -31,7 +31,6 @@ class Comment extends Component {
         this.setState({
             commentUpdated: commentUpdated
         })
-        console.log(event.target.value)
     }
 
     submitCommentEdit(event) {
